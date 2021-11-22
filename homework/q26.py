@@ -4,20 +4,18 @@ from typing import List
 Desk = List[str]
 
 
-def cardToPoint(card: str) -> float:
-    return (
+def countPoints(desk: Desk):
+    return reduce(lambda accumulator, card: accumulator + (
         1 if card == 'A'
         else 0.5 if card in ('J', 'K', 'Q')
         else int(card)
+    ), desk, 0.0)
+
+
+def wonGameAlready(desk: Desk):
+    return len(desk) == 5 or (
+        '10' in desk and any(card in desk for card in ['J', 'Q', 'K'])
     )
-
-
-def countPoints(desk: Desk):
-    return reduce(lambda a, b: a + cardToPoint(b), desk, 0.0)
-
-
-def wantCard(desk: Desk):
-    return countPoints(desk) < 10.5 and len(desk) < 5
 
 
 def main():
@@ -32,26 +30,25 @@ def main():
 
     for index in range(noOfPlayers):
         desk = playerDesks[index]
-        while wantCard(desk):
+        while not wonGameAlready(desk):
             choice = input()
             if choice == 'N':
                 break
             desk.append(input())
 
     bankDesk.append(input())
-    if not all(map(lambda desk: not wantCard(desk), playerDesks)):
-        while wantCard(bankDesk):
-            choice = input()
-            if choice == 'N':
-                break
-            bankDesk.append(input())
+    while not wonGameAlready(bankDesk):
+        choice = input()
+        if choice == 'N':
+            break
+        bankDesk.append(input())
 
     bankPoints = countPoints(bankDesk)
     for index, desk in enumerate(playerDesks):
         points = countPoints(desk)
         playerWonCredits = dealingPoints[index]
 
-        if points <= 10.5 and (bankPoints > 10.5 or points > countPoints(bankDesk) or len(desk) == 5):
+        if points <= 10.5 and (points > bankPoints or wonGameAlready(desk)):
             print(f'Player{index + 1} +{playerWonCredits}')
             bankWonCredits -= playerWonCredits
         else:
