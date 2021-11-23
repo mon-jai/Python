@@ -12,10 +12,14 @@ def countPoints(desk: Desk):
     ), desk, 0.0)
 
 
-def wonGameAlready(desk: Desk):
+def wonGame(desk: Desk):
     return len(desk) == 5 or (
         '10' in desk and any(card in desk for card in ['J', 'Q', 'K'])
     )
+
+
+def wantCard(desk: Desk):
+    return countPoints(desk) <= 10.5 and not wonGame(desk)
 
 
 def main():
@@ -30,14 +34,14 @@ def main():
 
     for index in range(noOfPlayers):
         desk = playerDesks[index]
-        while not wonGameAlready(desk):
+        while wantCard(desk):
             choice = input()
             if choice == 'N':
                 break
             desk.append(input())
 
     bankDesk.append(input())
-    while not wonGameAlready(bankDesk):
+    while wantCard(bankDesk):
         choice = input()
         if choice == 'N':
             break
@@ -48,7 +52,7 @@ def main():
         points = countPoints(desk)
         playerWonCredits = dealingPoints[index]
 
-        if points <= 10.5 and (points > bankPoints or wonGameAlready(desk)):
+        if points <= 10.5 and (bankPoints > 10.5 or wonGame(desk) or points > bankPoints):
             print(f'Player{index + 1} +{playerWonCredits}')
             bankWonCredits -= playerWonCredits
         else:
