@@ -18,8 +18,12 @@ def wonGame(desk: Desk):
     )
 
 
-def wantCard(desk: Desk):
-    return countPoints(desk) <= 10.5 and not wonGame(desk)
+def inputCard(desk: Desk):
+    while countPoints(desk) <= 10.5 and not wonGame(desk):
+        choice = input()
+        if choice == 'N':
+            break
+        desk.append(input())
 
 
 def main():
@@ -33,34 +37,24 @@ def main():
         playerDesks[index].append(card)
 
     for index in range(noOfPlayers):
-        desk = playerDesks[index]
-        while wantCard(desk):
-            choice = input()
-            if choice == 'N':
-                break
-            desk.append(input())
+        inputCard(playerDesks[index])
 
     bankDesk.append(input())
-    while wantCard(bankDesk):
-        choice = input()
-        if choice == 'N':
-            break
-        bankDesk.append(input())
+    inputCard(bankDesk)
 
     bankPoints = countPoints(bankDesk)
     for index, desk in enumerate(playerDesks):
         points = countPoints(desk)
-        playerWonCredits = dealingPoints[index]
+        bet = dealingPoints[index]
 
         if points <= 10.5 and (bankPoints > 10.5 or wonGame(desk) or points > bankPoints):
-            print(f'Player{index + 1} +{playerWonCredits}')
-            bankWonCredits -= playerWonCredits
+            print(f'Player{index + 1} +{bet}')
+            bankWonCredits -= bet
         else:
-            print(f'Player{index + 1} -{playerWonCredits}')
-            bankWonCredits += playerWonCredits
+            print(f'Player{index + 1} -{bet}')
+            bankWonCredits += bet
 
-    sign = '+' if bankWonCredits > 0 else ''
-    print(f'Bank {sign}{bankWonCredits}')
+    print(f'Bank {"+" if bankWonCredits > 0 else ""}{bankWonCredits}')
 
 
 main()
