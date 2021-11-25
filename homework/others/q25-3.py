@@ -13,7 +13,7 @@ Deck = List[Card]
 
 
 def isContinuous(desk: Deck):
-    specialNumber = ('J', 'K', 'Q')
+    specialNumber = ('J', 'Q', 'K')
     numbers = sorted(map(lambda card: (
         1 if card.number == 'A'
         else specialNumber.index(card.number) + 11 if card.number in specialNumber
@@ -22,12 +22,15 @@ def isContinuous(desk: Deck):
     previousNumber = numbers[0] if numbers[0] != 13 else 0
     for number in numbers[1:]:
         if number != previousNumber + 1:
-            for i in range(13 - number, 13 + 1):
-                try:
-                    numbers.index(i)
-                except:
-                    return False
-            return True
+            if previousNumber > 4:
+                return False
+            else:
+                for i in range(13 - (5 - previousNumber) + 1, 13 + 1):
+                    try:
+                        numbers.index(i)
+                    except:
+                        return False
+                return True
         elif number == 13:
             previousNumber = 0
         else:
