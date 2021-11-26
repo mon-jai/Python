@@ -20,12 +20,13 @@ def isContinuous(desk: Deck):
     previousNumber = numbers[0] if numbers[0] != 13 else 0
     for number in numbers[1:]:
         if number != previousNumber + 1:
-            for i in range(13 - number, 13 + 1):
-                try:
-                    numbers.index(i)
-                except:
-                    return False
-            return True
+            if previousNumber > 4:
+                return False
+            else:
+                for i in range(13 - (5 - previousNumber) + 1, 13 + 1):
+                    if not i in numbers:
+                        return False
+                return True
         elif number == 13:
             previousNumber = 0
         else:
@@ -42,6 +43,7 @@ def main():
         map(lambda card: card['number'], desk)
     ).most_common(2)
     suitCounter = Counter(map(lambda card: card['suit'], desk)).most_common(1)
+
     if suitCounter[0][1] == 5 and isContinuous(desk):
         print(8)
     elif numberCounter[0][1] >= 4:
