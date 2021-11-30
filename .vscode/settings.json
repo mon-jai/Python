@@ -3,8 +3,11 @@
   "python.analysis.typeCheckingMode": "strict",
   "python.linting.enabled": true,
   "python.linting.mypyEnabled": true,
-  // "python.formatting.yapfArgs": [
-  //   "--style={ dedent_closing_brackets: true, SPLIT_COMPLEX_COMPREHENSION: true }"
-  // ],
-  "terminal.integrated.defaultProfile.windows": "GitBash"
+  "terminal.integrated.defaultProfile.windows": "GitBash",
+  "python.formatting.autopep8Args": [
+    "--ignore",
+    "",
+    "--aggressive",
+    "--aggressive"
+  ]
 }
