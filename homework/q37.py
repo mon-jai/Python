@@ -9,7 +9,10 @@ def merge(data: Data) -> Data:
 
     for index1, tuple1 in enumerate(result):
         for tuple2 in result:
-            if tuple2 != tuple1 and tuple1[0] <= tuple2[0] <= tuple1[1]:
+            if (
+                id(tuple2) != id(tuple1) and
+                tuple1[0] <= tuple2[0] <= tuple1[1]
+            ):
                 result.remove(tuple2)
                 result[index1] = (min(tuple1[0], tuple2[0]),
                                   max(tuple1[1], tuple2[1]))
