@@ -4,7 +4,7 @@ Data = List[Tuple[int, int]]
 
 
 def merge(data: Data) -> Data:
-    result = [tuple for tuple in data]
+    result = data.copy()
     merged = False
 
     for index1, tuple1 in enumerate(result):
