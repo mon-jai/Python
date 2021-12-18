@@ -2,7 +2,17 @@ from typing import List, Union
 import re
 
 
-def splitGroups(inp: str):
+def process_group(group: str) -> str:
+    if group.isalpha():
+        return group
+    else:
+        multiplier, match = re.findall('(\\d)\\[(.+)\\]', group)[0]
+        return int(multiplier) * (
+            match if match.isalpha() else split_string_to_groups(match)
+        )
+
+
+def split_string_to_groups(inp: str):
     groups: List[str] = []
     start = 0
     index = 0
@@ -15,10 +25,9 @@ def splitGroups(inp: str):
                 charToCapture = 'bracket'
             elif inp[index].isalpha():
                 charToCapture = 'alpha'
-            else:
-                raise Exception(f'Wrong charactor :{inp[index]}')
         else:
             if index == len(inp) - 1:
+                # Last character in input
                 groups.append(inp[start:index + 1])
                 break
             elif charToCapture == 'alpha':
@@ -27,8 +36,6 @@ def splitGroups(inp: str):
                     start = index
                     charToCapture = None
                     continue  # Do not bump index value
-                else:
-                    pass
             else:
                 if inp[index] != ']':
                     if (inp[index] == '['):
@@ -39,27 +46,9 @@ def splitGroups(inp: str):
                         groups.append(inp[start:index + 1])
                         start = index + 1
                         charToCapture = None
-
         index = index + 1
 
-    return groups
+    return ''.join(map(process_group, groups))
 
 
-def multiply(group: str) -> str:
-    if group.isalpha():
-        return group
-    else:
-        multiplier = int(group[0])
-        return ''.join([
-            match * multiplier if match.isalpha()
-            else processGroup(match) * multiplier
-            for match in re.findall('\\d\\[(.+)\\]', group)
-        ])
-
-
-def processGroup(group: str) -> str:
-    groups = splitGroups(group)
-    return ''.join(map(multiply, groups))
-
-
-print(processGroup(input()))
+print(split_string_to_groups(input()))
