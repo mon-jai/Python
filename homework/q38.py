@@ -2,25 +2,17 @@ from math import floor
 
 
 def main():
-    input_string = 'abbabcc'
+    input_string = input()
     result: list[str] = []
 
     for i in range(len(input_string)):
-        print(i)
         for j in range(i, len(input_string)):
             substring = input_string[i:j + 1]
-            print(substring)
-            ok = True
-
-            for k in range(floor(len(substring) / 2)):
-                if substring[k] != substring[-(k + 1)]:
-                    ok = False
-                    break
-
-            if ok:
+            if all([substring[k] == substring[-(k + 1)]
+                    for k in range(floor(len(substring) / 2))]):
                 result.append(substring)
 
-    print(sorted(result))
+    print('#'.join(sorted(list(dict.fromkeys(result)))))
 
 
 main()

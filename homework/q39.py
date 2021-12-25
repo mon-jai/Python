@@ -1,16 +1,18 @@
 from functools import cmp_to_key
 from itertools import combinations
+from typing import Callable
 
 
 def main():
-    string, length = input().split(' ')
-    length = int(length)
+    inputs = input().split(' ')
+    string, length = inputs[0], int(inputs[1])
 
-    def compare(a: str, b: str):
-        return 1 if string.index(a) > string.index(b) else -1
-
+    comparer: Callable[[str, str], int] = lambda a, b: (
+        1 if string.index(a) > string.index(b) else -1
+    )
+    print(string, length)
     combs = sorted([
-        ''.join(sorted(comb, key=cmp_to_key(compare)))
+        ''.join(sorted(comb, key=cmp_to_key(comparer)))
         for comb in combinations(string, length)
         if comb[0] != comb[1] and comb[0] != comb[2] and comb[1] != comb[2]
     ])
