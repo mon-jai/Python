@@ -1,10 +1,11 @@
 from typing import Dict, Tuple
+from collections import OrderedDict
 
 
 def filter_colleges(
     colleges_to_characteristics: Dict[str, Tuple[str, ...]], requirements: str
 ):
-    result: Dict[str, int] = {}
+    result: Dict[str, int] = OrderedDict()
 
     for college, characteristics in colleges_to_characteristics.items():
         matches = 0
@@ -47,7 +48,16 @@ def main():
 
     requirements = input()
 
-    print(' '.join([f'{college}, {matches}' for college, matches in filter_colleges(colleges_to_characteristics, requirements).items()]))
+    print(
+        ' '.join(
+            [
+                f'{college},{matches}' for college,
+                matches in sorted(
+                    filter_colleges(
+                        colleges_to_characteristics,
+                        requirements).items(),
+                    key=lambda item: item[1],
+                    reverse=True)]))
 
 
 main()
