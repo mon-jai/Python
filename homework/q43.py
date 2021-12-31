@@ -51,13 +51,15 @@ def main():
     print(
         ' '.join(
             [
-                f'{college},{matches}' for college,
-                matches in sorted(
-                    filter_colleges(
-                        colleges_to_characteristics,
-                        requirements).items(),
+                f'{college},{matches}'
+                for college, matches in sorted(
+                    filter_colleges(colleges_to_characteristics, requirements).items(),
                     key=lambda item: item[1],
-                    reverse=True)]))
+                    reverse=True
+                )
+            ]
+        )
+    )
 
 
 main()
