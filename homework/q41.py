@@ -1,10 +1,10 @@
 from typing import Dict, List, Tuple
 
-
+Relationships = List[Tuple[int, int]]
 Relationship_Graph = Dict[int, List[int]]
 
 
-def build_relationship_graph(relationships: List[Tuple[int, int]]):
+def build_relationship_graph(relationships: Relationships):
     relationship_graph: Relationship_Graph = {}
 
     for relationship in relationships:
@@ -55,7 +55,7 @@ def main():
         int(s) for s in input().split()
     ]
 
-    relationships: List[Tuple[int, int]] = []
+    relationships: Relationships = []
 
     for _ in range(no_of_relationships):
         person_a, person_b = [int(s) for s in input().split()]
