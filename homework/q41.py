@@ -26,9 +26,9 @@ def is_two_person_connected(
     person_to_check: int,
     person_to_find: int,
     relationship_graph: Relationship_Graph,
-    checked: List[int] = []
+    checked_people: List[int] = []
 ):
-    if person_to_check in checked:
+    if person_to_check in checked_people:
         return False
 
     relationship_of_the_person_being_checked = relationship_graph[person_to_check]
@@ -36,24 +36,17 @@ def is_two_person_connected(
     if person_to_find in relationship_of_the_person_being_checked:
         return True
     else:
-        checked.append(person_to_check)
+        checked_people.append(person_to_check)
 
         for connected_person in relationship_of_the_person_being_checked:
-            if is_two_person_connected(
-                connected_person,
-                person_to_find,
-                relationship_graph,
-                checked
-            ):
+            if is_two_person_connected(connected_person, person_to_find, relationship_graph, checked_people):
                 return True
 
         return False
 
 
 def main():
-    no_of_relationships, person_to_start, person_to_find = [
-        int(s) for s in input().split()
-    ]
+    no_of_relationships, person_to_start, person_to_find = [int(s) for s in input().split()]
 
     relationships: Relationships = []
 
@@ -64,11 +57,7 @@ def main():
     relationship_graph = build_relationship_graph(relationships)
 
     print(
-        'Yes!' if is_two_person_connected(
-            person_to_start,
-            person_to_find,
-            relationship_graph
-        )
+        'Yes!' if is_two_person_connected(person_to_start, person_to_find, relationship_graph)
         else 'No!'
     )
 
