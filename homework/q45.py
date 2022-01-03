@@ -47,7 +47,8 @@ def path_to_destination(
             dead_ends.append(city_to_check)
             return []
         else:
-            return sorted(((path, len(path)) for path in possible_paths), reverse=True)[0][0]
+            possible_paths.sort(key=len)
+            return possible_paths[0]
 
 
 def main():
@@ -61,8 +62,11 @@ def main():
     connection_graph = build_connection_graph(connections)
     path = path_to_destination(starting_point, checkpoint, destination, connection_graph)
 
-    print(len(path) - 1)
-    print('-'.join(str(city) for city in path))
+    if len(path) > 0:
+        print(len(path) - 1)
+        print('-'.join(str(city) for city in path))
+    else:
+        print('No way!')
 
 
 main()
