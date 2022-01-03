@@ -1,12 +1,12 @@
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
-Relationships = List[Tuple[int, int]]
-Relationship_Graph = Dict[int, List[int]]
+Connections = List[Tuple[int, int]]
+Connection_Graph = Dict[int, List[int]]
 
 
-def build_connection_graph(connections: Relationships):
-    connection_graph: Relationship_Graph = defaultdict(list)
+def build_connection_graph(connections: Connections):
+    connection_graph: Connection_Graph = defaultdict(list)
 
     for connection in connections:
         first_city, second_city = connection
@@ -17,44 +17,37 @@ def build_connection_graph(connections: Relationships):
 
 
 def path_to_destination(
-    city_to_check: int,
+    starting_point: int,
     checkpoint: int,
     destination: int,
-    connection_graph: Relationship_Graph,
-    cities_passed_through: List[int] = [],
-    dead_ends: List[List[int]] = []
+    connection_graph: Connection_Graph
 ) -> List[int]:
-    if city_to_check in cities_passed_through:
-        return []
+    possible_paths: List[List[int]] = [[starting_point]]
 
-    connected_cities = connection_graph[city_to_check]
+    while True:
+        # https://stackoverflow.com/a/3752697
+        for path in possible_paths.copy():
+            current_city = path[-1]
+            possible_paths.remove(path)
+            is_dead_end = True
 
-    cities_passed_through.append(city_to_check)
+            for connected_city in connection_graph[current_city]:
+                if destination == connected_city and checkpoint in path:
+                    path.append(destination)
+                    return path
+                elif connected_city not in path:
+                    new_path = path.copy()
+                    new_path.append(connected_city)
+                    possible_paths.append(new_path)
+                    is_dead_end = False
 
-    if destination in connected_cities and checkpoint in cities_passed_through:
-        cities_passed_through.append(destination)
-        return cities_passed_through
-    else:
-        possible_paths = [
-            path for path in map(
-                lambda connected_city: path_to_destination(connected_city, checkpoint, destination, connection_graph, cities_passed_through.copy(), dead_ends),
-                connected_cities
-            )
-        ]
-
-        possible_paths.sort(key=len)
-
-        if len(possible_paths) == 0:
-            dead_ends.append(cities_passed_through)
-            return []
-        else:
-            possible_paths.sort(key=len)
-            return possible_paths[0]
+            if is_dead_end:
+                return []
 
 
 def main():
     no_of_connections, starting_point, checkpoint, destination = [int(s) for s in input().split()]
-    connections: Relationships = []
+    connections: Connections = []
 
     for _ in range(no_of_connections):
         city_a, city_b = [int(s) for s in input().split()]
