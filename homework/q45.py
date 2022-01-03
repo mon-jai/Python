@@ -22,9 +22,9 @@ def path_to_destination(
     destination: int,
     connection_graph: Relationship_Graph,
     cities_passed_through: List[int] = [],
-    dead_ends: List[int] = []
+    dead_ends: List[List[int]] = []
 ) -> List[int]:
-    if city_to_check in cities_passed_through or city_to_check in dead_ends:
+    if city_to_check in cities_passed_through:
         return []
 
     connected_cities = connection_graph[city_to_check]
@@ -40,11 +40,12 @@ def path_to_destination(
                 lambda connected_city: path_to_destination(connected_city, checkpoint, destination, connection_graph, cities_passed_through.copy(), dead_ends),
                 connected_cities
             )
-            if len(path) > 0
         ]
 
+        possible_paths.sort(key=len)
+
         if len(possible_paths) == 0:
-            dead_ends.append(city_to_check)
+            dead_ends.append(cities_passed_through)
             return []
         else:
             possible_paths.sort(key=len)
