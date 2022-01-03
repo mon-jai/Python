@@ -22,38 +22,38 @@ def build_relationship_graph(relationships: Relationships):
     return relationship_graph
 
 
-def is_two_city_connected(
+def path_to_destination(
     city_to_check: int,
     checkpoint: int,
     destination: int,
     relationship_graph: Relationship_Graph,
-    cities_passed_through: List[int] = []
+    cities_passed_through: List[int] = [],
+    dead_ends: List[int] = []
 ) -> List[int]:
-    if city_to_check in cities_passed_through:
+    if city_to_check in cities_passed_through or city_to_check in dead_ends:
         return []
-
-    relationship_of_the_city_being_checked = relationship_graph[city_to_check]
-
     cities_passed_through.append(city_to_check)
 
-    if destination in relationship_of_the_city_being_checked and checkpoint in cities_passed_through:
+    cities_connected = relationship_graph[city_to_check]
+    if destination in cities_connected and checkpoint in cities_passed_through:
         cities_passed_through.append(destination)
         return cities_passed_through
     else:
-        possible_paths: List[List[int]] = []
-        for connected_city in relationship_of_the_city_being_checked:
-            path_to_city = is_two_city_connected(connected_city, checkpoint, destination, relationship_graph, cities_passed_through.copy())
-
-            if len(path_to_city) > 0:
-                possible_paths.append(path_to_city)
+        possible_paths: List[List[int]] = [
+            path for path in map(
+                lambda connected_city: path_to_destination(connected_city, checkpoint, destination, relationship_graph, cities_passed_through.copy(), dead_ends),
+                cities_connected
+            )
+            if len(path) > 0
+        ]
 
         if len(possible_paths) == 0:
+            dead_ends.append(city_to_check)
             return []
         else:
             list_by_length = [(path, len(path)) for path in possible_paths]
             list_by_length.sort(key=lambda x: x[1])
             return list_by_length[0][0]
-
 
 
 def main():
@@ -67,7 +67,7 @@ def main():
 
     relationship_graph = build_relationship_graph(relationships)
 
-    print(is_two_city_connected(starting_point, checkpoint, destination, relationship_graph))
+    print(path_to_destination(starting_point, checkpoint, destination, relationship_graph))
 
 
 main()
