@@ -26,6 +26,7 @@ def path_to_destination(
 
     while True:
         # https://stackoverflow.com/a/3752697
+        # https://stackoverflow.com/a/6260097
         for path in possible_paths.copy():
             current_city = path[-1]
             possible_paths.remove(path)
@@ -36,9 +37,7 @@ def path_to_destination(
                     path.append(destination)
                     return path
                 elif connected_city not in path:
-                    new_path = path.copy()
-                    new_path.append(connected_city)
-                    possible_paths.append(new_path)
+                    possible_paths.append(path + [connected_city])
                     is_dead_end = False
 
             if is_dead_end:
