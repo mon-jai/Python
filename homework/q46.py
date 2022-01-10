@@ -7,10 +7,6 @@ class Meeting(NamedTuple):
     hour_occupied: Set[int]
 
 
-def get_set_of_hours_from_time(starting_time: int, ending_time: int):
-    return set(range(starting_time, ending_time))
-
-
 def sum_of_meeting_length(meetings: Iterable[Meeting]):
     return sum(map(lambda meeting: len(meeting.hour_occupied), meetings))
 
@@ -21,7 +17,7 @@ def main():
 
     for _ in range(no_of_meetings):
         meeting_id, starting_time, ending_time = [int(s) for s in input().split()]
-        meetings.append(Meeting(meeting_id, get_set_of_hours_from_time(starting_time, ending_time)))
+        meetings.append(Meeting(meeting_id, set(range(starting_time, ending_time))))
 
     meetings_combinations = [
         meetings_combination
