@@ -38,6 +38,9 @@ def main():
     selected_meetings: list[Meeting] = []
 
     for _ in range(no_of_rooms):
+        if(len(meetings_combinations) == 0):
+            break
+
         selected_meetings += [meeting for meeting in meetings_combinations[0]]
         del meetings_combinations[0]
 
