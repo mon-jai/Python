@@ -4,11 +4,11 @@ from itertools import combinations
 
 class Meeting(NamedTuple):
     id: int
-    hour_occupied: Set[int]
+    hours_occupied: Set[int]
 
 
 def sum_of_meeting_length(meetings: Iterable[Meeting]):
-    return sum(map(lambda meeting: len(meeting.hour_occupied), meetings))
+    return sum(map(lambda meeting: len(meeting.hours_occupied), meetings))
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
         for i in range(1, no_of_meetings + 1)
         for meetings_combination in combinations(meetings, i)
         if all(
-            len(meeting_a.hour_occupied & meeting_b.hour_occupied) == 0
+            len(meeting_a.hours_occupied & meeting_b.hours_occupied) == 0
             for meeting_a, meeting_b in combinations(meetings_combination, 2)
         )
     ]
