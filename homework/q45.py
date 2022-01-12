@@ -30,7 +30,6 @@ def path_to_destination(
         for path in possible_paths.copy():
             current_city = path[-1]
             possible_paths.remove(path)
-            is_dead_end = True
 
             for connected_city in connection_graph[current_city]:
                 if destination == connected_city and checkpoint in path:
@@ -38,10 +37,9 @@ def path_to_destination(
                     return path
                 elif connected_city not in path:
                     possible_paths.append(path + [connected_city])
-                    is_dead_end = False
 
-            if is_dead_end:
-                return []
+        if len(possible_paths) == 0:
+            return []
 
 
 def main():

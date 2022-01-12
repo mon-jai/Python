@@ -40,10 +40,11 @@ def main():
         selected_meetings += [meeting for meeting in meetings_combinations[0]]
         del meetings_combinations[0]
 
-        meetings_combinations = list(filter(
-            lambda meetings_combination: all(meeting not in selected_meetings for meeting in meetings_combination),
-            meetings_combinations
-        ))
+        meetings_combinations = [
+            meetings_combination
+            for meetings_combination in meetings_combinations
+            if all(meeting not in selected_meetings for meeting in meetings_combination)
+        ]
 
     print(sum_of_meeting_length(selected_meetings))
 
