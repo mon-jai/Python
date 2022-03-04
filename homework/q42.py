@@ -49,8 +49,13 @@ def calculate(arithmetic_sequence: Arithmetic_Sequence) -> float:
         elif '/' in arithmetic_sequence:
             sub_calculate(arithmetic_sequence.index('/'))
             continue
+        elif '%' in arithmetic_sequence:
+            sub_calculate(arithmetic_sequence.index('%'))
+            continue
         else:
             break
+    
+    print(arithmetic_sequence)
 
     while True:
         if '+' in arithmetic_sequence:

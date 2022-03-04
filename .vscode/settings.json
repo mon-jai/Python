@@ -11,5 +11,18 @@
     "",
     "--aggressive",
     "--aggressive"
+  ],
+  "python.linting.mypyArgs": [
+    "--follow-imports=silent",
+    "--ignore-missing-imports",
+    "--show-column-numbers",
+    "--no-pretty",
+    "--strict",
+    "--no-implicit-optional",
+    "--disallow-any-unimported",
+    "--disallow-any-expr",
+    "--disallow-any-explicit",
+    "--disallow-any-generics",
+    "--disallow-subclassing-any"
   ]
 }
